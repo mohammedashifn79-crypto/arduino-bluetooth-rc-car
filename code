@@ -1,1 +1,67 @@
+#include <AFMotor.h>
 
+// Motors (based on your wiring)
+AF_DCMotor motorRF(1); // M1 Right Front
+AF_DCMotor motorLB(2); // M2 Left Back
+AF_DCMotor motorRB(3); // M3 Right Back
+AF_DCMotor motorLF(4); // M4 Left Front
+
+char command;
+
+void setup() {
+  Serial.begin(9600);
+
+  motorRF.setSpeed(200);
+  motorLB.setSpeed(200);
+  motorRB.setSpeed(200);
+  motorLF.setSpeed(200);
+}
+
+void loop() {
+  if (Serial.available()) {
+    command = Serial.read();
+
+    switch (command) {
+      case 'F': forward(); break;
+      case 'B': backward(); break;
+      case 'L': left(); break;
+      case 'R': right(); break;
+      case 'S': stopCar(); break;
+    }
+  }
+}
+
+void forward() {
+  motorRF.run(FORWARD);
+  motorRB.run(FORWARD);
+  motorLF.run(FORWARD);
+  motorLB.run(FORWARD);
+}
+
+void backward() {
+  motorRF.run(BACKWARD);
+  motorRB.run(BACKWARD);
+  motorLF.run(BACKWARD);
+  motorLB.run(BACKWARD);
+}
+
+void left() {
+  motorRF.run(FORWARD);
+  motorRB.run(FORWARD);
+  motorLF.run(BACKWARD);
+  motorLB.run(BACKWARD);
+}
+
+void right() {
+  motorRF.run(BACKWARD);
+  motorRB.run(BACKWARD);
+  motorLF.run(FORWARD);
+  motorLB.run(FORWARD);
+}
+
+void stopCar() {
+  motorRF.run(RELEASE);
+  motorRB.run(RELEASE);
+  motorLF.run(RELEASE);
+  motorLB.run(RELEASE);
+}
